@@ -63,7 +63,7 @@ namespace Becas.Controllers
 
         // GET: /Beca/ListaSolicitudes
         [HttpGet]
-        //[Authorize(Roles = "Revisor")]
+        [Authorize(Roles = "REVISOR")]
         public IActionResult ListaSolicitudes()
         {
            var identity = User.Identity as ClaimsIdentity;

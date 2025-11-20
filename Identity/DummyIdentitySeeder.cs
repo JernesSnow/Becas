@@ -15,7 +15,10 @@ public class DummyIdentitySeeder
     private static readonly (string UserName, string Password, string[] Roles)[] DemoUsers =
     {
         ("profesor", "Demo123$", new[] { "Administrador", "Revisor" }),
+        ("PROFESOR", "Demo123$", new[] { "Administrador", "Revisor" }),
         ("estudiante", "Demo123$", new[] { "Estudiante" }),
+        ("ESTUDIANTE", "Demo123$", new[] { "Estudiante" }),
+
         ("coordinador", "Demo123$", new[] { "Revisor" }),
         ("COORDINADOR", "Demo123$", new[] { "Revisor", "Administrador" })
     };

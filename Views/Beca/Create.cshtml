@@ -1,80 +1,86 @@
 @model Becas.Models.SolicitudBeca
 @using Microsoft.AspNetCore.Mvc.Rendering
+
 @{
     ViewData["Title"] = "Solicitud de Beca";
-  
 }
 
-<div class="beca-header text-center text-white py-4 mb-4">
-    <h1 class="mb-0">Liceo Experimental Bilingüe José Figueres Ferrer</h1>
-    <p class="lead mb-0">Módulo de Gestión de Becas del Comedor</p>
- </div>
+<div class="beca-container">
 
-<div class="container">
-    @if (TempData["Mensaje"] != null)
-    {
-        <div id="mensajeExito" class="alert alert-success" role="alert">@TempData["Mensaje"]</div>
-        
-        
-    }
+    <div class="beca-header text-center text-white py-4 mb-4 shadow-sm">
+        <h1 class="mb-1 fw-bold">Liceo Experimental Bilingüe José Figueres Ferrer</h1>
+        <p class="lead mb-0 opacity-75">Gestión de Becas del Comedor</p>
+    </div>
 
-    <div class="card beca-card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Solicitud de Beca</h4>
-           
-        </div>
-        <div class="card-body">
+    <div class="beca-form-wrapper mx-auto">
 
-            @using (Html.BeginForm("Create", "Beca", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate", id = "formBeca" }))
-            {
-               
-                @Html.AntiForgeryToken()
+        @if (TempData["Mensaje"] != null)
+        {
+            <div id="mensajeExito" class="alert alert-success shadow-sm" role="alert">
+                @TempData["Mensaje"]
+            </div>
+        }
 
-                @Html.ValidationSummary(true, "Por favor corrija los errores:", new { @class = "text-danger mb-3" })
+        <div class="card beca-card shadow-lg border-0">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4 class="mb-0 fw-semibold">Formulario de Solicitud</h4>
+            </div>
 
-                <div class="mb-3">
-                    @Html.LabelFor(m => m.NombreEstudiante, new { @class = "form-label" })
-                    @Html.TextBoxFor(m => m.NombreEstudiante, new { @class = "form-control", placeholder = "Nombre completo del estudiante" })
-                    @Html.ValidationMessageFor(m => m.NombreEstudiante, null, new { @class = "text-danger" })
+            <div class="card-body p-4">
+
+                @using (Html.BeginForm("Create", "Beca", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate", id = "formBeca" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "Por favor revise los siguientes errores:", new { @class = "text-danger mb-3" })
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.NombreEstudiante, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.NombreEstudiante, new { @class = "form-control beca-input", placeholder = "Nombre completo" })
+                            @Html.ValidationMessageFor(m => m.NombreEstudiante, null, new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.Cedula, new { @class = "form-label fw-semibold" })
+                            @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control beca-input", placeholder = "Ejemplo: 123456789", maxlength = 9, inputmode = "numeric" })
+                            @Html.ValidationMessageFor(m => m.Cedula, null, new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-6">
+                            @Html.LabelFor(m => m.Canton, new { @class = "form-label fw-semibold" })
+                            @Html.DropDownListFor(
+                            m => m.Canton,
+                                                new SelectList((IEnumerable<string>)ViewBag.Cantones),
+                                                "Seleccione un cantón",
+                                                new { @class = "form-select beca-input" }
+                                                )
+                        @Html.ValidationMessageFor(m => m.Canton, null, new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-6 d-flex align-items-center mt-4">
+                        <div class="form-check">
+                            @Html.CheckBoxFor(m => m.TuvoBecaAnterior, new { @class = "form-check-input beca-check" })
+                            @Html.LabelFor(m => m.TuvoBecaAnterior, new { @class = "form-check-label fw-semibold ms-1" })
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        @Html.LabelFor(m => m.Detalle, new { @class = "form-label fw-semibold" })
+                        @Html.TextAreaFor(m => m.Detalle, 6, 50, new { @class = "form-control beca-input", placeholder = "Describa la situación socioeconómica..." })
+                        @Html.ValidationMessageFor(m => m.Detalle, null, new { @class = "text-danger" })
+                    </div>
 
                 </div>
 
-                <div class="mb-3">
-                    @Html.LabelFor(m => m.Cedula, new { @class = "form-label" })
-                    @Html.TextBoxFor(m => m.Cedula, new { @class = "form-control", placeholder = "#########", maxlength = 9, inputmode = "numeric" })
-                    @Html.ValidationMessageFor(m => m.Cedula, null, new { @class = "text-danger" })
-                    @* NO VAN A ESTAR *@
-                    @Html.Password("hiddenField", "1234", new { style = "display:true;" }))
-                    @Html.ActionLink(linkText: "redirigir lista", actionName: "ListaSolicitudes")
-                    @Html.DropDownList("Mi Dropdow", new SelectList(new List<string> { "Opción 1", "Opción 2", "Opción 3" }), "Seleccione una opción", new { @class = "form-select" })
-                </div>
-               
-                <div class="mb-3">
-                    @Html.LabelFor(m => m.Canton, new { @class = "form-label" })
-                    @Html.DropDownListFor(m => m.Canton,
-                        new SelectList((IEnumerable<string>)ViewBag.Cantones),
-                        "Seleccione un cantón",
-                        new { @class = "form-select" })
-                    @Html.ValidationMessageFor(m => m.Canton, null, new { @class = "text-danger" })
+                <div class="d-flex gap-3 mt-4">
+                    <button type="submit" class="btn btn-primary beca-btn">Enviar Solicitud</button>
+                    <a class="btn btn-outline-secondary beca-btn" href="@Url.Action("ListaSolicitudes", "Beca")">Ver Solicitudes</a>
+                    <a class="btn btn-outline-info beca-btn" href="@Url.Action("Ejemplos", "Beca")">Ver Ejemplos</a>
                 </div>
 
-                <div class="mb-3 form-check">
-                    @Html.CheckBoxFor(m => m.TuvoBecaAnterior, new { @class = "form-check-input" })
-                    @Html.LabelFor(m => m.TuvoBecaAnterior, new { @class = "form-check-label" })
-                </div>
-
-                <div class="mb-3">
-                    @Html.LabelFor(m => m.Detalle, new { @class = "form-label" })
-                    @Html.TextAreaFor(m => m.Detalle, 6, 50, new { @class = "form-control", placeholder = "Describa la situación socioeconómica" })
-                    @Html.ValidationMessageFor(m => m.Detalle, null, new { @class = "text-danger" })
-                </div>
-
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary" id="btnEnviar">Enviar Solicitud</button>
-                    <a class="btn btn-outline-secondary" href="@Url.Action("ListaSolicitudes", "Beca")">Ver Solicitudes</a>
-                    <a class="btn btn-outline-info" href="@Url.Action("Ejemplos", "Beca")">Ver Ejemplos de Helpers</a>
-                </div>
-            }
+                                }
+            </div>
         </div>
     </div>
 </div>
